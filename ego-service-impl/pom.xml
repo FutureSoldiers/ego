@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ego-parent</artifactId>
+        <groupId>com.ego</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ego-service-impl</artifactId>
+
+
+
+    <properties>
+        <servlet-version>3.0.1</servlet-version>
+        <jsp-version>2.2</jsp-version>
+        <jstl-version>1.2</jstl-version>
+        <spring-version>4.1.6.RELEASE</spring-version>
+        <aspectjweaver-version>1.8.6</aspectjweaver-version>
+        <mybatis-version>3.2.7</mybatis-version>
+        <mybatis-spring-version>1.2.3</mybatis-spring-version>
+        <log4j-version>1.2.17</log4j-version>
+        <mysql-connector-java-version>5.1.38</mysql-connector-java-version>
+        <jackson-version>2.4.1</jackson-version>
+        <commons-fileupload-version>1.3.1</commons-fileupload-version>
+        <jedis-version>2.8.1</jedis-version>
+        <dubbo-vsrsion>2.5.3</dubbo-vsrsion>
+        <zkClient-version>0.11</zkClient-version>
+        <tomcat-version>2.2</tomcat-version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.1.6</version>
+        </dependency>
+        <!--依赖service-->
+        <dependency>
+            <groupId>com.ego</groupId>
+            <artifactId>ego-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectjweaver-version}</version>
+        </dependency>
+        <!-- mybatis  -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis-version}</version>
+        </dependency>
+        <!-- mybatis和spring整合 -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring-version}</version>
+        </dependency>
+        <!-- 日志包 -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+        <!-- mysql 驱动类 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java-version}</version>
+        </dependency>
+
+        <!--dubbo-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo-vsrsion}</version>
+        <exclusions>
+            <exclusion>
+                <artifactId>spring</artifactId>
+                <groupId>org.springframework</groupId>
+            </exclusion>
+        </exclusions>
+        </dependency>
+        <!--访问zookeeper的客户端jar-->
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>${zkClient-version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <!-- 指定项目的打包插件信息 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.4</version>
+                <configuration>
+                    <!-- 指定打包描述文件的位置：相对项目根目录的路径 -->
+                    <!-- assembly打包的描述文件 -->
+                    <descriptor>assembly/assembly.xml</descriptor>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

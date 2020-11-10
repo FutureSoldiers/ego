@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--这是最基本的schema-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+      http://www.springframework.org/schema/aop/spring-aop.xsd
+      http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd"
+       default-autowire="byName">
+    <!--配置注解扫描-->
+    <context:component-scan base-package="com.ego.dubbo.service.impl"></context:component-scan>
+    <!--加载属性文件-->
+    <context:property-placeholder location="classpath:db.properties"></context:property-placeholder>
+    <!--配置数据源-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <!--配置sqlSessionFactory-->
+    <bean id="factory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="typeAliasesPackage" value="com.ego.pojo"></property>
+        <!--加载分页插件-->
+        <property name="configLocation" value="classpath:mybatis.xml"></property>
+    </bean>
+    <!--配置扫描器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ego.mapper"></property>
+        <property name="sqlSessionFactoryBeanName" value="factory"></property>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="txManage" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"></bean>
+    <!--声明事务-->
+    <tx:advice id="txAdvice" transaction-manager="txManage">
+        <tx:attributes>
+            <tx:method name="ins*" rollback-for="java.lang.Exception"/>
+            <tx:method name="upd*" rollback-for="java.lang.Exception"/>
+            <tx:method name="del*" rollback-for="java.lang.Exception"/>
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--配置aop-->
+    <aop:config>
+        <aop:pointcut id="mypoint" expression="execution(* com.ego.dubbo.service.impl.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="mypoint"/>
+    </aop:config>
+</beans>
